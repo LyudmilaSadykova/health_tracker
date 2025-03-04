@@ -1,8 +1,8 @@
-<script setup lang="ts">
+<script setup>
   import { ref, computed, onMounted, watch} from 'vue';
   import Chart from 'chart.js/auto';
 
-  const chart = ref<Chart>();
+  const chart = ref();
 
   const props = defineProps({
     chartOptions: {
