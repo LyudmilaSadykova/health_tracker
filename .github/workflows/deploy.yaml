@@ -2,8 +2,8 @@ name: Build and deploy to Github Pages
 
 on:
   push:
-  branches:
-    - master
+    branches:
+      - master
 
 permissions:
   contents: read
