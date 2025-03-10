@@ -17,7 +17,10 @@ export const useWatherBalanceStore = defineStore('wather_balance', () => {
   const getGraphData = computed(() => {
     const data = wather_balance.value.reduce(
       (res, curr) => {
-        !res.hasOwnProperty(curr.date) ? res[curr.date] = curr.ml : res[curr.date] += curr.ml;
+        if (!(<any>Object).hasOwn(res, curr.date))
+          res[curr.date] = curr.ml
+        else
+          res[curr.date] += curr.ml;
         return res;
       },
       <dataGraph>{}

@@ -17,7 +17,10 @@ export const useActivityStore = defineStore('activity', () => {
   const getGraphData = computed(() => {
     const data = activity.value.reduce(
       (res, curr) => {
-        !res.hasOwnProperty(curr.date) ? res[curr.date] = curr.kcal : res[curr.date] += curr.kcal;
+        if (!(<any>Object).hasOwn(res, curr.date))
+          res[curr.date] = curr.kcal
+        else 
+          res[curr.date] += curr.kcal;
         return res;
       },
       <dataGraph>{}

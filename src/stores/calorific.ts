@@ -38,7 +38,10 @@ export const useCalorificStore = defineStore('calorific', () => {
     const data = calorific.value.reduce(
       (res, curr) => {
         let summ = kcalByDish(curr) * curr.quantity
-        !res.hasOwnProperty(curr.date) ? res[curr.date] = summ : res[curr.date] += summ;
+        if (!(<any>Object).hasOwn(res, curr.date))
+          res[curr.date] = summ
+        else
+          res[curr.date] += summ;
         return res;
       },
       <dataGraph>{}
