@@ -8,32 +8,26 @@ type Activity = {
 }
 
 interface dataGraph {
-  [index: string]: Activity;
+  [index: string]: number;
 }
 
 export const useActivityStore = defineStore('activity', () => {
   const activity = ref<Activity[]>(activityValues);
 
   const getGraphData = computed(() => {
-    let data = activity.value.reduce(function (res, current) {
-      if (!res.hasOwnProperty(current.date))
-          res[current.date] = {
-            date: current.date,
-            kcal: current.kcal,
-          };
-      else {
-          res[current.date].kcal += current.kcal;
-      }
+    const data = activity.value.reduce(
+      (res, curr) => {
+        !res.hasOwnProperty(curr.date) ? res[curr.date] = curr.kcal : res[curr.date] += curr.kcal;
+        return res;
+      },
+      <dataGraph>{}
+    );
 
-      return res;
-    }, <dataGraph>{});
-
-    let datasets: number[] = [];
-    Object.keys(data).forEach(function(key) {
-      datasets.push(data[key].kcal);
-    });
-
-    return {labels: Object.keys(data), datasets: datasets, height: (datasets.length * 25) + 80};
+    return {
+      labels: Object.keys(data), 
+      datasets: Object.values(data), 
+      height: (Object.keys(data).length * 25) + 80
+    };
   })
 
   function saveActivity(newValue: Activity) {

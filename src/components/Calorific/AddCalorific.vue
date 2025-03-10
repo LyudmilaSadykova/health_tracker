@@ -34,25 +34,25 @@
   const kcal = ref();  
   const kcalRules = ref([
     (v: number) => !!v || 'Калорийность обязательное поле',
-    (v: string) => (/^[0-9]+\.?[0-9]+$/.test(v)) || 'Калорийность должна быть числом',
+    (v: string) => (/^[0-9]+\.?[0-9]*$/.test(v)) || 'Калорийность должна быть числом',
   ]);
 
   const protein = ref();  
   const proteinRules = ref([
     (v: number) => !!v || 'Белки обязательное поле',
-    (v: string) => (/^[0-9]+\.?[0-9]+$/.test(v)) || 'Белки должно быть числом',
+    (v: string) => (/^[0-9]+\.?[0-9]*$/.test(v)) || 'Белки должно быть числом',
   ]);
 
   const fat = ref();  
   const fatRules = ref([
     (v: number) => !!v || 'Жиры обязательное поле',
-    (v: string) => (/^[0-9]+\.?[0-9]+$/.test(v)) || 'Жиры должно быть числом',
+    (v: string) => (/^[0-9]+\.?[0-9]*$/.test(v)) || 'Жиры должно быть числом',
   ]);
 
   const carbohydrate = ref();
   const carbohydrateRules = ref([
     (v: number) => !!v || 'Углеводы обязательное поле',
-    (v: string) => (/^[0-9]+\.?[0-9]+$/.test(v)) || 'Углеводы должно быть числом',
+    (v: string) => (/^[0-9]+\.?[0-9]*$/.test(v)) || 'Углеводы должно быть числом',
   ]);
 
   async function submitForm () {

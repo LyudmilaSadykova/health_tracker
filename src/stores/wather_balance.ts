@@ -8,53 +8,31 @@ type WB = {
 }
 
 interface dataGraph {
-  [index: string]: WB;
+  [index: string]: number;
 }
 
 export const useWatherBalanceStore = defineStore('wather_balance', () => {
   const wather_balance = ref<WB[]>(watherBalanceValues);
 
-  // const getHeight = computed(() => {
-  //   return (wather_balance.value.length * 25) + 80;
-  // })
-
-  // const getLabels = computed(() => {
-  //   return wather_balance.value.map((str) => {
-  //     return str.date;
-  //   })
-  // })
-
-  // const getDataSet = computed(() => {
-  //   return wather_balance.value.map((str) => {
-  //     return str.ml;
-  //   })
-  // })
-
   const getGraphData = computed(() => {
-    let data = wather_balance.value.reduce(function (res, current) {
-      if (!res.hasOwnProperty(current.date))
-          res[current.date] = {
-            date: current.date,
-            ml: current.ml,
-          };
-      else {
-          res[current.date].ml += current.ml;
-      }
+    const data = wather_balance.value.reduce(
+      (res, curr) => {
+        !res.hasOwnProperty(curr.date) ? res[curr.date] = curr.ml : res[curr.date] += curr.ml;
+        return res;
+      },
+      <dataGraph>{}
+    );
 
-      return res;
-    }, <dataGraph>{});
-
-    let datasets: number[] = [];
-    Object.keys(data).forEach(function(key) {
-      datasets.push(data[key].ml);
-    });
-
-    return {labels: Object.keys(data), datasets: datasets, height: (datasets.length * 25) + 80};
+    return {
+      labels: Object.keys(data), 
+      datasets: Object.values(data), 
+      height: (Object.keys(data).length * 25) + 80
+    };
   })
 
   function saveWatherBalance(newValue: WB) {
     wather_balance.value.push(newValue);
   }
 
-  return { wather_balance/*, getHeight, getLabels, getDataSet*/, getGraphData, saveWatherBalance }
+  return { wather_balance, getGraphData, saveWatherBalance }
 })

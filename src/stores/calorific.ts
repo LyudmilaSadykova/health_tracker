@@ -24,7 +24,7 @@ type CalorificSumm = {
 }
 
 interface dataGraph {
-  [index: string]: CalorificSumm;
+  [index: string]: number;
 }
 
 export const useCalorificStore = defineStore('calorific', () => {
@@ -35,25 +35,19 @@ export const useCalorificStore = defineStore('calorific', () => {
   const settingsStore = useSettingsStore();
 
   const getGraphData = computed(() => {
-    let data = calorific.value.reduce(function (res, current) {
-      if (!res.hasOwnProperty(current.date))
-          res[current.date] = {
-            date: current.date,
-            calorific: kcalByDish(current) * current.quantity
-          };
-      else {
-          res[current.date].calorific += kcalByDish(current) * current.quantity;
-      }
+    const data = calorific.value.reduce(
+      (res, curr) => {
+        let summ = kcalByDish(curr) * curr.quantity
+        !res.hasOwnProperty(curr.date) ? res[curr.date] = summ : res[curr.date] += summ;
+        return res;
+      },
+      <dataGraph>{}
+    );
 
-      return res;
-    }, <dataGraph>{});
-
-    let datasets: number[] = [];
-    Object.keys(data).forEach(function(key) {
-      datasets.push(data[key].calorific);
-    });
-
-    return {labels: Object.keys(data), datasets: datasets, height: (datasets.length * 25) + 80};
+    return {
+      labels: Object.keys(data), 
+      datasets: Object.values(data), 
+      height: (Object.keys(data).length * 25) + 80};
   })  
 
   function calculateCalorific(activity: number): number {
